@@ -1,31 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useGetCreatorCourseQuery } from '@/features/api/courseapi';
 
-const Dashboarad = () => {
-  const [courses, setCourses] = useState([
-    { name: "React Basics", registrations: 120, revenue: 6000 },
-    { name: "Advanced JavaScript", registrations: 80, revenue: 4000 },
-  ]);
+const Dashboard = () => {
+  const { data, isLoading, isError } = useGetCreatorCourseQuery();
+  const navigate = useNavigate();
 
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [editData, setEditData] = useState({ name: "", registrations: 0, revenue: 0 });
+  console.log("Fetched Courses:", data);
 
-  // Handle Edit Click
-  const handleEdit = (index) => {
-    setEditingIndex(index);
-    setEditData(courses[index]);
+  if (isLoading) return <h1>Loading...</h1>;
+  if (isError) return <h1 className="text-red-500">Failed to get courses</h1>;
+
+  const courses = data?.courses || [];
+
+  const handleEdit = (course) => {
+    navigate(`/course/${course._id}`, { state: { course } });
   };
+  
 
-  // Handle Input Change
-  const handleChange = (e) => {
-    setEditData({ ...editData, [e.target.name]: e.target.value });
-  };
-
-  // Save Updated Course
-  const handleSave = () => {
-    const updatedCourses = [...courses];
-    updatedCourses[editingIndex] = editData;
-    setCourses(updatedCourses);
-    setEditingIndex(null);
+  const handleAddNewCourse = () => {
+    navigate('/course/create');
   };
 
   return (
@@ -36,7 +30,12 @@ const Dashboarad = () => {
         {/* Add Course Section */}
         <div className="bg-gray-800 p-4 rounded-lg mb-6">
           <h2 className="text-xl font-semibold mb-4 text-blue-300">Add Course</h2>
-          <button className="bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600">Add New Course</button>
+          <button
+            onClick={handleAddNewCourse}
+            className="bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600"
+          >
+            Add New Course
+          </button>
         </div>
 
         {/* Published Courses Section */}
@@ -47,72 +46,24 @@ const Dashboarad = () => {
               <tr>
                 <th className="p-2 border-b border-gray-600">Course Name</th>
                 <th className="p-2 border-b border-gray-600">Registrations</th>
-                <th className="p-2 border-b border-gray-600">Revenue ($)</th>
+                <th className="p-2 border-b border-gray-600">Revenue (₹)</th>
                 <th className="p-2 border-b border-gray-600">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {courses.map((course, index) => (
-                <tr key={index} className="hover:bg-gray-700">
-                  {editingIndex === index ? (
-                    <>
-                      <td className="p-2 border-b border-gray-600">
-                        <input
-                          type="text"
-                          name="name"
-                          value={editData.name}
-                          onChange={handleChange}
-                          className="bg-gray-700 p-1 rounded-md text-white border border-gray-600"
-                        />
-                      </td>
-                      <td className="p-2 border-b border-gray-600">
-                        <input
-                          type="number"
-                          name="registrations"
-                          value={editData.registrations}
-                          onChange={handleChange}
-                          className="bg-gray-700 p-1 rounded-md text-white border border-gray-600"
-                        />
-                      </td>
-                      <td className="p-2 border-b border-gray-600">
-                        <input
-                          type="number"
-                          name="revenue"
-                          value={editData.revenue}
-                          onChange={handleChange}
-                          className="bg-gray-700 p-1 rounded-md text-white border border-gray-600"
-                        />
-                      </td>
-                      <td className="p-2 border-b border-gray-600">
-                        <button
-                          onClick={handleSave}
-                          className="bg-green-500 px-3 py-1 rounded-md hover:bg-green-600 mr-2"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={() => setEditingIndex(null)}
-                          className="bg-red-500 px-3 py-1 rounded-md hover:bg-red-600"
-                        >
-                          Cancel
-                        </button>
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td className="p-2 border-b border-gray-600">{course.name}</td>
-                      <td className="p-2 border-b border-gray-600">{course.registrations}</td>
-                      <td className="p-2 border-b border-gray-600">{course.revenue}</td>
-                      <td className="p-2 border-b border-gray-600">
-                        <button
-                          onClick={() => handleEdit(index)}
-                          className="bg-blue-500 px-3 py-1 rounded-md hover:bg-blue-600"
-                        >
-                          Edit
-                        </button>
-                      </td>
-                    </>
-                  )}
+              {courses.map((course) => (
+                <tr key={course._id} className="hover:bg-gray-700">
+                  <td className="p-2 border-b border-gray-600">{course.courseTitle}</td>
+                  <td className="p-2 border-b border-gray-600">{course.enrolledStudents.length}</td>
+                  <td className="p-2 border-b border-gray-600">₹{course.price || 0}</td>
+                  <td className="p-2 border-b border-gray-600">
+                    <button
+                      onClick={() => handleEdit(course)}
+                      className="bg-blue-500 px-3 py-1 rounded-md hover:bg-blue-600"
+                    >
+                      Edit
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -123,4 +74,4 @@ const Dashboarad = () => {
   );
 };
 
-export default Dashboarad
+export default Dashboard;

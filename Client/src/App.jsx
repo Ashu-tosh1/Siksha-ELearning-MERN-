@@ -17,6 +17,8 @@ import CreateLecture from './Pages/admin/Lectures/CreateLecture';
 import EditLectures from './Pages/admin/Lectures/EditLectures';
 import Lecture from './Pages/admin/Lectures/Lecture';
 import EditCourse from './Pages/admin/course/EditCourse';
+import CourseTable from './Pages/admin/course/CourseTable';
+import CourseProgress from './Pages/student/CourseProgress';
 
 
 const appRouter=createBrowserRouter([
@@ -43,13 +45,23 @@ const appRouter=createBrowserRouter([
           </>
         )
       }, {
-        path:'course-detail',
+        path:'course-detail/:courseId',
         element:(
           <>
           <CourseDetail/>
           </>
         )
-      },{
+      },
+      {
+        path: "course-progress/:courseId",
+        element: (
+          
+            
+            <CourseProgress />
+           
+       
+        ),},
+      {
         path:'assignment',
         element:(
           <>
@@ -70,14 +82,17 @@ const appRouter=createBrowserRouter([
     element:<Dashboarad/>
   },
   {
-    path:"admin/course",
-    element:<CreateCourse/>
+    path:"course/create", 
+    element:<CreateCourse/> //<AddCourse>
   },
   {
     path:"course/:courseId",
     element:<EditCourse/>
   },
-  
+  {
+    path: "course",
+    element: <CourseTable />,
+  },
   {
     path: "course/:courseId/lecture",
     element: <CreateLecture />,

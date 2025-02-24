@@ -13,6 +13,7 @@ const CreateCourse = () => {
   const [courseDetails, setCourseDetails] = useState({
     courseTitle: "",
     category: "Web Development",
+    price: "", // New field for course price
   });
 
   const handleChange = (e) => {
@@ -25,10 +26,11 @@ const CreateCourse = () => {
         const response = await createCourse({
           courseTitle: courseDetails.courseTitle,
           category: courseDetails.category,
+          price: courseDetails.price, // Include price in API request
         }).unwrap();
 
         setCourseId(response.course._id); // Store course ID for Step 2
-        navigate(`/admin/course/${response.course._id}`);// Redirect to Step 2
+        navigate(`/course/${response.course._id}`); // Redirect to Step 2
       } catch (error) {
         console.error("Course creation failed", error);
       }
@@ -42,8 +44,8 @@ const CreateCourse = () => {
 
         {/* Step Indicator */}
         <div className="flex items-center justify-between mb-6">
-          <div className={`w-1/2 h-2 rounded-full ${step === 1 ? 'bg-blue-500' : 'bg-gray-500'}`}></div>
-          <div className={`w-1/2 h-2 rounded-full ${step === 2 ? 'bg-blue-500' : 'bg-gray-500'}`}></div>
+          <div className={`w-1/3 h-2 rounded-full ${step === 1 ? 'bg-blue-500' : 'bg-gray-500'}`}></div>
+          <div className={`w-1/3 h-2 rounded-full ${step === 2 ? 'bg-blue-500' : 'bg-gray-500'}`}></div>
         </div>
 
         {/* Step 1: Course Details */}
@@ -75,6 +77,18 @@ const CreateCourse = () => {
                   <option>AI & Machine Learning</option>
                   <option>Cyber Security</option>
                 </select>
+              </div>
+              <div>
+                <label className="text-gray-400">Price (₹)</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={courseDetails.price}
+                  onChange={handleChange}
+                  className="w-full p-3 bg-gray-700 text-white rounded-md border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  placeholder="Enter price"
+                  required
+                />
               </div>
             </div>
           </div>

@@ -1,11 +1,9 @@
 // import RichTextEditor from "@/components/RichTextEditor";
 // import RichTextEditor from "@/components/RichTextEditor";
 import { useEditCourseMutation, useGetCourseByIdQuery, usePublishCourseMutation } from "@/features/api/courseapi";
-
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// import { toast } from "sonner";
 
 const CourseTab = () => {
   const [input, setInput] = useState({
@@ -33,7 +31,7 @@ const CourseTab = () => {
         category: course.category,
         courseLevel: course.courseLevel,
         coursePrice: course.coursePrice,
-        courseThumbnail: null, // Ensuring no accidental empty string assignment
+        courseThumbnail: null,
       });
     }
   }, [courseByIdData]);
@@ -67,25 +65,26 @@ const CourseTab = () => {
 
   const publishStatusHandler = async (action) => {
     if (courseByIdData?.course.lectures.length === 0) {
-    //   return toast.error("Add at least one lecture before publishing.");
-    console.log("error")
+      console.log("error"); // Show error if no lectures
     }
     try {
       const response = await publishCourse({ courseId, query: action });
       if (response.data) {
         refetch();
-        // toast.success(response.data.message);
-        console.log("success")
+        console.log("success");
       }
     } catch (error) {
-    //   toast.error("Failed to publish or unpublish course");
-    console.log("error")
+      console.log("error");
     }
   };
 
   useEffect(() => {
-    if (isSuccess) toast.success(data?.message || "Course updated.");
-    if (error) toast.error(error?.data?.message || "Failed to update course");
+    if (isSuccess) {
+      console.log("success");
+    }
+    if (error) {
+      console.log("error");
+    }
   }, [isSuccess, error]);
 
   if (courseByIdLoading) return <h1 className="text-center text-xl text-white">Loading...</h1>;
@@ -113,12 +112,29 @@ const CourseTab = () => {
         </div>
 
         <div className="space-y-6">
+          {/* Course Thumbnail */}
           <label className="text-gray-400 font-medium">Course Thumbnail</label>
           <input type="file" onChange={selectThumbnail} accept="image/*" className="w-full p-3 bg-gray-800 rounded-md border border-gray-600" />
           {previewThumbnail && <img src={previewThumbnail} className="h-64 my-4 rounded-md object-cover" alt="Course Thumbnail" />}
 
+          {/* Course Price */}
+          <div>
+            <label className="text-gray-400 font-medium">Course Price (₹)</label>
+            <input
+              type="number"
+              name="coursePrice"
+              value={input.coursePrice}
+              onChange={changeEventHandler}
+              className="w-full p-3 bg-gray-800 rounded-md border border-gray-600 focus:border-blue-500 focus:outline-none"
+              placeholder="Enter course price"
+              required
+            />
+          </div>
+
           <div className="flex justify-end gap-4 mt-6">
-            <button onClick={() => navigate("/admin/course")} className="px-6 py-3 bg-gray-700 rounded-md hover:bg-gray-600 transition">Cancel</button>
+            <button onClick={() => navigate("/admin/course")} className="px-6 py-3 bg-gray-700 rounded-md hover:bg-gray-600 transition">
+              Cancel
+            </button>
             <button disabled={isLoading} onClick={updateCourseHandler} className="px-6 py-3 bg-green-600 rounded-md hover:bg-green-700 transition flex items-center text-white">
               {isLoading ? (<><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Please wait</>) : "Save"}
             </button>
@@ -130,3 +146,4 @@ const CourseTab = () => {
 };
 
 export default CourseTab;
+

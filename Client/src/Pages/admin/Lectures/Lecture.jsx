@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Lecture = ({ lecture, courseId, index }) => {
   const navigate = useNavigate();
   const goToUpdateLecture = () => {
-    navigate(`/${courseId}/lecture/${lecture._id}`);
+    navigate(`/course/${courseId}/lecture/${lecture._id}`);
   };
 
   return (
