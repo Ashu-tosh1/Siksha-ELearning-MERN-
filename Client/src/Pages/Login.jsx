@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginUserMutation, useRegisterUserMutation } from "@/features/api/authapi";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+// import { userLoggedIn } from "@/features/authSlice"; 
+import { userLoggedIn } from "@/features/auth/authslice"; // ✅ Import Redux action
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -9,6 +12,7 @@ const Login = () => {
   const [loginInput, setloginInput] = useState({ email: "", password: "" });
   
   const navigate = useNavigate();
+  const dispatch = useDispatch();  // ✅ Redux dispatch
 
   const [registerUser, { data: registerData, error: registerError, isLoading: registerIsLoading }] = useRegisterUserMutation();
   const [loginUser, { data: loginData, error: loginError, isLoading: loginIsLoading }] = useLoginUserMutation();
@@ -40,12 +44,19 @@ const Login = () => {
     }
 
     if (loginData) {
+      console.log("User Data from API:", loginData); // ✅ Debugging
+
+      // ✅ Ensure role is present before dispatching
+      if (loginData.user) {
+        dispatch(userLoggedIn(loginData.user)); // ✅ Store user in Redux
+      }
+
       toast.success(loginData.message || "Login successful.");
-      navigate("/");
+      navigate("/");  // Redirect after login
     } else if (loginError) {
       toast.error("Login Failed");
     }
-  }, [loginData, registerData, loginError, registerError]);
+  }, [loginData, registerData, loginError, registerError, dispatch, navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
