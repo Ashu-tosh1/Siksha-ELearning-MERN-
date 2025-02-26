@@ -1,10 +1,29 @@
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, School } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { useLogoutUserMutation } from "@/features/api/authapi";
+import { useEffect, useState } from "react";
+import { userLoggedOut } from "@/features/auth/authslice"; // ✅ Import logout action
 
 const Navbar = () => {
-   const isOpen=true
-  const user = true; // Change this based on authentication state
+  const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const [logoutUser, { isSuccess }] = useLogoutUserMutation();
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false); // ✅ Fixed state for mobile menu
+
+  const logoutHandler = async () => {
+    await logoutUser();
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log("User logged out");
+      dispatch(userLoggedOut()); // ✅ Clear user state from Redux
+      navigate("/login");
+      window.location.reload();
+    }
+  }, [isSuccess, navigate, dispatch]);
 
   return (
     <nav className="bg-black text-white fixed top-0 left-0 right-0 z-50 shadow-md">
@@ -20,9 +39,20 @@ const Navbar = () => {
           <div className="hidden md:flex space-x-6">
             {user ? (
               <div className="flex items-center space-x-4">
-                <Link to="/my-learning" className="hover:text-yellow-400">My Learning</Link>
+                {user?.role === "instructor" ? (
+                  <Link to="/my-course" className="hover:text-yellow-400">
+                    My Course
+                  </Link>
+                ) : (
+                  <Link to="/my-learning" className="hover:text-yellow-400">
+                    My Learning
+                  </Link>
+                )}
                 <Link to="/profile" className="hover:text-yellow-400">Profile</Link>
-                <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+                <button
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+                  onClick={logoutHandler}
+                >
                   Logout
                 </button>
               </div>
@@ -48,9 +78,20 @@ const Navbar = () => {
         <div className="md:hidden bg-black text-white p-4 space-y-4">
           {user ? (
             <>
-              <Link to="/my-learning" className="block hover:text-yellow-400">My Learning</Link>
+              {user?.role === "instructor" ? (
+                <Link to="/my-course" className="block hover:text-yellow-400">
+                  My Course
+                </Link>
+              ) : (
+                <Link to="/my-learning" className="block hover:text-yellow-400">
+                  My Learning
+                </Link>
+              )}
               <Link to="/profile" className="block hover:text-yellow-400">Profile</Link>
-              <button className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+              <button
+                onClick={logoutHandler}
+                className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+              >
                 Logout
               </button>
             </>

@@ -3,16 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useLoginUserMutation, useRegisterUserMutation } from "@/features/api/authapi";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-// import { userLoggedIn } from "@/features/authSlice"; 
 import { userLoggedIn } from "@/features/auth/authslice"; // ✅ Import Redux action
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [signupInput, setsignupInput] = useState({ name: "", email: "", password: "" });
   const [loginInput, setloginInput] = useState({ email: "", password: "" });
-  
+
   const navigate = useNavigate();
-  const dispatch = useDispatch();  // ✅ Redux dispatch
+  const dispatch = useDispatch(); // ✅ Redux dispatch
 
   const [registerUser, { data: registerData, error: registerError, isLoading: registerIsLoading }] = useRegisterUserMutation();
   const [loginUser, { data: loginData, error: loginError, isLoading: loginIsLoading }] = useLoginUserMutation();
@@ -46,13 +45,16 @@ const Login = () => {
     if (loginData) {
       console.log("User Data from API:", loginData); // ✅ Debugging
 
-      // ✅ Ensure role is present before dispatching
+      // ✅ Ensure user data is present before dispatching
       if (loginData.user) {
         dispatch(userLoggedIn(loginData.user)); // ✅ Store user in Redux
       }
 
       toast.success(loginData.message || "Login successful.");
-      navigate("/");  // Redirect after login
+      navigate("/"); // Redirect after login
+      setTimeout(() => {
+        window.location.reload(); // ✅ Reload the page after login
+      }, 500);
     } else if (loginError) {
       toast.error("Login Failed");
     }
@@ -91,7 +93,7 @@ const Login = () => {
         {/* Toggle Section for Desktop */}
         <div className="hidden md:flex absolute top-0 left-1/2 w-1/2 h-full bg-teal-700 text-white items-center justify-center flex-col p-10 transition-all duration-500">
           <h1 className="text-2xl font-bold">{isSignUp ? "Welcome Back!" : "Hello, Friend!"}</h1>
-          <button onClick={() => setIsSignUp(!isSignUp)} className="mt-4 border border-white px-6 py-2 rounded">
+          <button onClick={() => setIsSignUp(!isSignUp)}  className="mt-4 border border-white px-6 py-2 rounded">
             {isSignUp ? "Sign In" : "Sign Up"}
           </button>
         </div>

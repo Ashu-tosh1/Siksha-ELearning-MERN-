@@ -24,6 +24,7 @@ import PurchaseCourseProtectedRoute from './components/PurchaseCourseProtectedRo
 import Dashboard from './Pages/admin/Dashboarad';
 import Footer from './Pages/student/Footer';
 import MyLearning from './Pages/student/MyLearning';
+import Demo from './Pages/student/Demo';
 
 
 const appRouter = createBrowserRouter([
@@ -82,6 +83,12 @@ const appRouter = createBrowserRouter([
             </PurchaseCourseProtectedRoute>
           </ProtectedRoute>
         ),
+        
+      },{
+        path:'demo',
+        element:(
+          <Demo/>
+        )
       },
 
       // ✅ Admin Routes - Wrapped Separately
@@ -118,6 +125,9 @@ const appRouter = createBrowserRouter([
             path: 'course/:courseId/lecture/:lectureId',
             element: <EditLectures />,
           },
+          {
+            
+          }
         ],
       },
     ],

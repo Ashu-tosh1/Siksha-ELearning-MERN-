@@ -137,3 +137,14 @@
 .group-hover\:translate-y-full {
   transform: translateY(100%); /* Moves the info section down */
 }
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
