@@ -44,6 +44,19 @@ const CourseTab = () => {
     setInput({ ...input, [name]: value });
   };
 
+  const function_name= async () =>  {
+    return ("hello")
+  }
+
+  // const async (params) => {
+    
+  // // }
+  // const function name(params) {
+    
+  // }
+  // const async function name(params) {
+    
+  // }
   const selectThumbnail = (e) => {
     const file = e.target.files?.[0];
     if (file) {

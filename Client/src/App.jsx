@@ -9,10 +9,8 @@ import Layout from './MainLayout/Layout';
 import Courses from './Pages/student/Courses';
 import Profile from './Pages/student/Profile';
 import CourseDetail from './Pages/student/CourseDetail';
-import Assignment from './Pages/student/Assignment';
 import Dashboarad from './Pages/admin/Dashboarad';
 import CreateCourse from './Pages/admin/course/CreateCourse';
-
 import CreateLecture from './Pages/admin/Lectures/CreateLecture';
 import EditLectures from './Pages/admin/Lectures/EditLectures';
 import Lecture from './Pages/admin/Lectures/Lecture';
@@ -24,7 +22,7 @@ import PurchaseCourseProtectedRoute from './components/PurchaseCourseProtectedRo
 import Dashboard from './Pages/admin/Dashboarad';
 import Footer from './Pages/student/Footer';
 import MyLearning from './Pages/student/MyLearning';
-import Demo from './Pages/student/Demo';
+
 
 
 const appRouter = createBrowserRouter([
@@ -84,12 +82,8 @@ const appRouter = createBrowserRouter([
           </ProtectedRoute>
         ),
         
-      },{
-        path:'demo',
-        element:(
-          <Demo/>
-        )
-      },
+      }
+    ,
 
       // ✅ Admin Routes - Wrapped Separately
       {
@@ -135,15 +129,6 @@ const appRouter = createBrowserRouter([
 
  
 ]);
-
-
-
-
-//{
-  //   path: "lecture",
-  //   element: <Lecture />,
-  // },
-
 
 function App() {
   return (
