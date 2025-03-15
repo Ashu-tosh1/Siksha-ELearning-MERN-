@@ -40,7 +40,7 @@ const Filter = ({ handleFilterChange }) => {
       <div className="flex flex-col space-y-4">
         <h1 className="font-semibold text-lg">Filter Options</h1>
         <select
-          className="border p-2 rounded-md w-full"
+          className="border p-2 rounded-md w-full text-black"
           onChange={selectByPriceHandler}
         >
           <option value="">Sort by</option>
