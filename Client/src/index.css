@@ -148,3 +148,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Hide scrollbar for Recent Purchases */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+}

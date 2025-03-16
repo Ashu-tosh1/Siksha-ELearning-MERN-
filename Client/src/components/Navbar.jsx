@@ -30,10 +30,13 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
+          <Link to={"/"}>
           <div className="flex items-center">
             <School size={30} className="text-lime-200" />
             <h1 className="ml-2 text-2xl font-bold">Siksha-Elearning</h1>
           </div>
+          </Link>
+          
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6">

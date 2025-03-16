@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import Filter from "./Filter";
 import SearchResult from "./SearchResult";
 import { useGetSearchCourseQuery } from "@/features/api/courseapi";
@@ -27,7 +27,7 @@ const SearchPage = () => {
   return (
     <div className="max-w-screen mt-4 mx-auto p-4 md:p-8 bg-black text-white min-h-screen">
       <div className="my-6">
-        <h1 className="font-bold text-xl md:text-2xl">Results for "{query}"</h1>
+        <h1 className="font-bold text-xl md:text-2xl">Results for " {query} "</h1>
         <p>
           Showing results for <span className="text-blue-400 font-bold italic">{query}</span>
         </p>
@@ -56,7 +56,7 @@ const CourseNotFound = () => {
       <AlertCircle className="text-red-500 h-16 w-16 mb-4" />
       <h1 className="font-bold text-2xl md:text-4xl text-white mb-2">Course Not Found</h1>
       <p className="text-lg text-gray-400 mb-4">
-        Sorry, we couldn't find the course you're looking for.
+       &quot; Sorry, we couldn&apos;t find the course you&apos;re looking for. &quot;
       </p>
       <Link to="/" className="text-blue-400 hover:underline">
         Browse All Courses

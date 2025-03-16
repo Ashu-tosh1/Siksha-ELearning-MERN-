@@ -38,7 +38,7 @@ src={course.courseThumbnail ? course.courseThumbnail : "image.png"|| slider1}
         </div>
         <h3 className="mt-2 text-lg font-semibold text-gray-200 truncate">{course.courseTitle}</h3>
         <p className="text-gray-300 text-sm mt-1 line-clamp-2">
-          {course.courseDescription || "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}
+          {course.description || "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}
         </p>
 
         {/* Instructor & Price */}

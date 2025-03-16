@@ -1,9 +1,7 @@
-// import RichTextEditor from "@/components/RichTextEditor";
-// import RichTextEditor from "@/components/RichTextEditor";
 import { useEditCourseMutation, useGetCourseByIdQuery, usePublishCourseMutation } from "@/features/api/courseapi";
 import { Loader2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const CourseTab = () => {
   const [input, setInput] = useState({
@@ -44,19 +42,6 @@ const CourseTab = () => {
     setInput({ ...input, [name]: value });
   };
 
-  const function_name= async () =>  {
-    return ("hello")
-  }
-
-  // const async (params) => {
-    
-  // // }
-  // const function name(params) {
-    
-  // }
-  // const async function name(params) {
-    
-  // }
   const selectThumbnail = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -67,6 +52,7 @@ const CourseTab = () => {
     }
   };
 
+  
   const updateCourseHandler = async () => {
     const formData = new FormData();
     Object.entries(input).forEach(([key, value]) => {
@@ -74,6 +60,7 @@ const CourseTab = () => {
     });
 
     await editCourse({ formData, courseId });
+   navigate(`/course/${courseId}/lecture`);
   };
 
   const publishStatusHandler = async (action) => {
@@ -103,8 +90,8 @@ const CourseTab = () => {
   if (courseByIdLoading) return <h1 className="text-center text-xl text-white">Loading...</h1>;
 
   return (
-    <div className="min-h-screen w-full bg-black flex items-center justify-center p-6">
-      <div className="w-full max-w-6xl bg-gray-900 rounded-xl shadow-xl p-8">
+    <div className="min-h-screen w-full bg-[#121212] flex items-center justify-center p-6">
+      <div className="w-full max-w-6xl bg-[#1A1A1A] rounded-xl shadow-2xl border border-gray-800 p-8">
         <div className="flex flex-col md:flex-row justify-between items-center border-b border-gray-700 pb-6 mb-6">
           <div>
             <h1 className="text-3xl font-bold text-blue-400">Basic Course Information</h1>
@@ -114,23 +101,21 @@ const CourseTab = () => {
             <button
               disabled={courseByIdData?.course.lectures.length === 0}
               onClick={() => publishStatusHandler(courseByIdData?.course.isPublished ? "false" : "true")}
-              className="px-6 py-2 border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {courseByIdData?.course.isPublished ? "Unpublish" : "Publish"}
             </button>
-            <button className="px-6 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition rounded-md">
+            <button className="px-6 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition rounded-lg">
               Remove Course
             </button>
           </div>
         </div>
 
         <div className="space-y-6">
-          {/* Course Thumbnail */}
           <label className="text-gray-400 font-medium">Course Thumbnail</label>
-          <input type="file" onChange={selectThumbnail} accept="image/*" className="w-full p-3 bg-gray-800 rounded-md border border-gray-600" />
-          {previewThumbnail && <img src={previewThumbnail} className="h-64 my-4 rounded-md object-cover" alt="Course Thumbnail" />}
+          <input type="file" onChange={selectThumbnail} accept="image/*" className="w-full p-3 bg-gray-800 rounded-lg border border-gray-600" />
+          {previewThumbnail && <img src={previewThumbnail} className="h-64 my-4 rounded-lg object-cover" alt="Course Thumbnail" />}
 
-          {/* Course Price */}
           <div>
             <label className="text-gray-400 font-medium">Course Price (₹)</label>
             <input
@@ -138,19 +123,22 @@ const CourseTab = () => {
               name="coursePrice"
               value={input.coursePrice}
               onChange={changeEventHandler}
-              className="w-full p-3 bg-gray-800 rounded-md border border-gray-600 focus:border-blue-500 focus:outline-none"
+              className="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
               placeholder="Enter course price"
               required
             />
           </div>
 
           <div className="flex justify-end gap-4 mt-6">
-            <button onClick={() => navigate("/admin/course")} className="px-6 py-3 bg-gray-700 rounded-md hover:bg-gray-600 transition">
+            <button onClick={() => navigate("/course")} className="px-6 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition">
               Cancel
             </button>
-            <button disabled={isLoading} onClick={updateCourseHandler} className="px-6 py-3 bg-green-600 rounded-md hover:bg-green-700 transition flex items-center text-white">
+            
+            <button disabled={isLoading} onClick={updateCourseHandler} className="px-6 py-3 bg-green-600 rounded-lg hover:bg-green-700 transition flex items-center text-white">
               {isLoading ? (<><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Please wait</>) : "Save"}
             </button>
+           
+           
           </div>
         </div>
       </div>
@@ -159,4 +147,3 @@ const CourseTab = () => {
 };
 
 export default CourseTab;
-

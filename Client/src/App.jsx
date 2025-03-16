@@ -37,7 +37,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: isAdmin ? <Dashboard /> : (
+          element: isAdmin ? <Trial /> : (
             <>
               <HeroSection />
               <Courses />
@@ -99,7 +99,7 @@ function App() {
           children: [
             {
               path: "dashboard",
-              element: <Dashboard />,
+              element: <Trial />,
             },
             {
               path: "course",

@@ -1,8 +1,8 @@
 import { useEditLectureMutation, useGetLectureByIdQuery, useRemoveLectureMutation } from "@/features/api/courseapi";
 import axios from "axios";
-import { Loader2 } from "lucide-react";
+import { Loader2, Upload, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const MEDIA_API = "http://localhost:3000/api/v1/media";
 
@@ -26,13 +26,21 @@ const LectureTab = () => {
     }
   }, [lecture]);
 
-  const [editLecture, { data, isLoading, error, isSuccess }] =
-    useEditLectureMutation();
-  const [removeLecture, { data: removeData, isLoading: removeLoading, isSuccess: removeSuccess }] =
-    useRemoveLectureMutation();
+  const [editLecture, { isLoading, isSuccess, error }] = useEditLectureMutation();
+  const [removeLecture, { isLoading: removeLoading, isSuccess: removeSuccess }] = useRemoveLectureMutation();
 
-  const fileChangeHandler = async (e) => {
-    const file = e.target.files[0];
+  // Drag & Drop Handlers
+  const handleDrop = async (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    uploadFile(file);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const uploadFile = async (file) => {
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
@@ -49,7 +57,6 @@ const LectureTab = () => {
             videoUrl: res.data.data.url,
             publicId: res.data.data.public_id,
           });
-          console.log("Video uploaded successfully");
         }
       } catch (error) {
         console.log("Error uploading video");
@@ -73,46 +80,91 @@ const LectureTab = () => {
     await removeLecture(lectureId);
   };
 
-  useEffect(() => {
-    if (isSuccess) {
-        console.log("success")
-    }
-    if (error) {
-        console.log("error")
-    }
-  }, [isSuccess, error]);
-
-  useEffect(() => {
-    if (removeSuccess) toast.success(removeData.message);
-  }, [removeSuccess]);
-
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gray-900 text-white p-6">
-      <div className="w-full max-w-5xl h-full bg-gray-800 p-10 rounded-lg shadow-xl flex flex-col justify-between">
+    <div className="h-[70vh] w-[70vw] flex items-center justify-center  text-white p-6">
+      <div className="w-full max-w-4xl bg-[#121212] p-8 rounded-lg shadow-lg border border-gray-700">
         {/* Header */}
-        <div className="flex justify-between items-center border-b border-gray-700 pb-6">
-          <div>
-            <h1 className="text-3xl font-bold">Edit Lecture</h1>
-            <p className="text-gray-400">Modify lecture details and save changes.</p>
-          </div>
+        <div className="flex justify-between items-center border-b border-gray-700 pb-4">
+          <h1 className="text-2xl font-bold">Edit Lecture</h1>
           <button
             disabled={removeLoading}
             onClick={removeLectureHandler}
-            className="bg-red-600 px-6 py-3 rounded-lg hover:bg-red-700 transition duration-200 flex items-center"
+            className="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center"
           >
             {removeLoading ? (
               <>
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Removing...
+                Removing...    <motion.aside
+        initial={{ x: -200, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="bg-gray-900 w-64 p-6 border-r border-gray-800 shadow-lg"
+      >
+        <h2 className="text-2xl font-bold text-blue-500">Admin Panel</h2>
+        <nav className="mt-6">
+          <ul className="space-y-5">
+            <li>
+              <Link to="/dashboard" className="flex items-center gap-4 p-3 rounded-lg  hover:bg-gray-700 transition duration-300">
+                <BarChart className="w-6 h-6 text-blue-400" />
+                Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link to="/course" className="flex items-center gap-4 p-3 rounded-lg  hover:bg-gray-700 transition duration-300">
+                <BookOpen className="w-6 h-6 text-green-400" />
+                Courses
+              </Link>
+            </li>
+            <li>
+              <button
+                onClick={() => navigate("/admin/courses/add")}
+                className="flex items-center gap-3 p-3 w-full text-left rounded-lg hover:bg-gray-800 transition"
+              >
+                <BookPlus className="w-5 h-5 text-yellow-400" />
+                Add Course
+              </button>
+              <ul className="ml-6 mt-1 space-y-1 border-l border-gray-700 pl-3">
+                <li>
+                  <button
+                    // onClick={() => navigate("/admin/courses/add/step1")}
+                    className="flex items-center gap-2 p-2 w-full text-left rounded-md hover:bg-gray-800 transition text-sm"
+                  >
+                    🔹 Add Basic Details
+                  </button>
+                </li>
+                <li>
+                  <button
+                    // onClick={() => navigate("/admin/courses/add/step2")}
+                    className="flex items-center gap-2 p-2 w-full text-left rounded-md bg-gray-800 transition text-sm"
+                  >
+                    🔹 Add Lecture Name
+                  </button>
+                </li>
+                <li>
+                  <button
+                    // onClick={() => navigate("/admin/courses/add/step3")}
+                    className="flex items-center gap-2 p-2 w-full text-left rounded-md hover:bg-gray-800 text-white transition text-sm"
+                  >
+                    🔹 Add Lecture Details
+                  </button>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </motion.aside>
               </>
             ) : (
-              "Delete Lecture"
+              <>
+                <Trash2 className="w-5 h-5 mr-2" />
+                Delete Lecture
+              </>
             )}
           </button>
         </div>
 
         {/* Lecture Details */}
-        <div className="flex flex-col gap-6">
+        <div className="mt-6 space-y-6">
           <div>
             <label className="block text-lg font-medium mb-2">Lecture Title</label>
             <input
@@ -120,18 +172,36 @@ const LectureTab = () => {
               onChange={(e) => setLectureTitle(e.target.value)}
               type="text"
               placeholder="Enter lecture title..."
-              className="w-full p-4 bg-gray-700 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white text-lg"
+              className="w-full p-3 bg-gray-700 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white text-lg"
             />
           </div>
 
+          {/* Drag & Drop File Upload */}
           <div>
             <label className="block text-lg font-medium mb-2">Upload Video</label>
-            <input
-              type="file"
-              accept="video/*"
-              onChange={fileChangeHandler}
-              className="block w-full text-lg text-gray-300 bg-gray-700 border border-gray-600 rounded-lg cursor-pointer p-4 focus:ring-blue-500 focus:border-blue-500"
-            />
+            <div
+              className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600 transition"
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+            >
+              {uploadVideoInfo ? (
+                <p className="text-gray-300">{uploadVideoInfo.videoUrl.split("/").pop()}</p>
+              ) : (
+                <>
+                  <Upload className="w-10 h-10 text-gray-400 mb-2" />
+                  <span className="text-gray-400">Drag & drop a file here or</span>
+                  <label className="text-blue-400 underline cursor-pointer">
+                    Click to upload
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="video/*"
+                      onChange={(e) => uploadFile(e.target.files[0])}
+                    />
+                  </label>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Progress Bar */}
@@ -184,6 +254,16 @@ const LectureTab = () => {
               "Save Changes"
             )}
           </button>
+ {/* <Link to={`/admin/course/${courseId}/lecture`}>
+                                <button className=" px-3 py-1 rounded-full hover:bg-blue-600 transition">
+                                    ⬅
+                                </button>
+                            </Link> */}
+
+          <Link to={`/course/${courseId}/lecture`}>
+          <button className="bg-blue-600 ml-4 px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center text-lg">Return to Lectures</button>
+          </Link>
+          
         </div>
       </div>
     </div>

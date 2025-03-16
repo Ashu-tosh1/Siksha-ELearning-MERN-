@@ -5,7 +5,7 @@ import {deleteMediaFromCloudinary, deleteVideoFromCloudinary, uploadMedia} from 
 
 export const createCourse = async (req,res) => {
     try {
-        const {courseTitle, category} = req.body;
+        const {courseTitle, category, subTitle, description, courseLevel, courseDuration} = req.body;
         if(!courseTitle || !category) {
             return res.status(400).json({
                 message:"Course title and category is required."
@@ -15,6 +15,10 @@ export const createCourse = async (req,res) => {
         const course = await Course.create({
             courseTitle,
             category,
+            subTitle,
+            description,
+            courseLevel,
+            courseDuration,
             creator:req.id
         });
 

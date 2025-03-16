@@ -17,6 +17,7 @@ const CourseDetail = () => {
 
   const { course, purchased } = data;
 
+  console.log(course);
   const handleContinueCourse = () => {
     if (purchased) {
       navigate(`/course-progress/${courseId}`);
@@ -45,9 +46,11 @@ const CourseDetail = () => {
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard icon={Clock} title="Duration" value={course?.duration || "N/A"} />
+          <StatCard icon={Clock} title="Duration" value={course?.courseDuration
+ || "N/A"} />
           <StatCard icon={BookOpen} title="Lessons" value={course?.lectures?.length || 0} />
-          <StatCard icon={BarChart2} title="Level" value={course?.level || "All Levels"} />
+          <StatCard icon={BarChart2} title="Level" value={course?.courseLevel
+ || "All Levels"} />
           <StatCard icon={User} title="Students" value={course?.enrolledStudents?.length || 0} />
         </div>
       </div>

@@ -24,36 +24,51 @@ const MyLearning = () => {
   }, [user]);
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-semibold mb-4">My Learning</h2>
+    <div className="min-h-screen mt-[45px] bg-[#0a0a0a] text-white p-8">
+      <h2 className="text-3xl font-extrabold text-blue-400 mb-6 text-center">
+        My Learning 📚
+      </h2>
 
       {enrolledCourses.length === 0 ? (
-        <p className="text-gray-500">You are not enrolled in any courses yet.</p>
+        <p className="text-gray-400 text-center">You are not enrolled in any courses yet.</p>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {enrolledCourses.map((course) => (
-            <div key={course._id} className="bg-white rounded-lg shadow-md p-4">
-              <img 
-                src={course.thumbnail} 
-                alt={course.title} 
-                className="w-full h-40 object-cover rounded-md"
-              />
-              <h3 className="mt-3 text-lg font-bold">{course.title}</h3>
-              <p className="text-gray-600">Instructor: {course.instructor}</p>
+            <div
+              key={course._id}
+              className="bg-white/10 backdrop-blur-lg p-5 rounded-xl shadow-lg border border-white/20 transition-transform duration-300 hover:scale-105 hover:shadow-blue-500/30"
+            >
+              {/* Course Thumbnail */}
+              <div className="relative">
+                <img
+                  src={course.thumbnail}
+                  alt={course.title}
+                  className="w-full h-40 object-cover rounded-lg"
+                />
+                <p className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 text-xs rounded-md">
+                  {course.progress || 0}% completed
+                </p>
+              </div>
 
-              <div className="w-full bg-gray-200 rounded-full h-3 mt-3">
+              {/* Course Details */}
+              <h3 className="mt-4 text-lg font-bold">{course.title}</h3>
+              <p className="text-gray-400 text-sm">Instructor: {course.instructor}</p>
+
+              {/* Progress Bar */}
+              <div className="w-full bg-gray-800 rounded-full h-3 mt-3">
                 <div
-                  className="bg-teal-500 h-3 rounded-full"
+                  className="bg-blue-500 h-3 rounded-full transition-all"
                   style={{ width: `${course.progress || 0}%` }}
                 ></div>
               </div>
-              <p className="text-sm text-gray-600 mt-2">{course.progress || 0}% completed</p>
 
+              {/* Continue Button */}
               <a
-                href={`/course/${course._id}`}
-                className="block bg-teal-600 text-white mt-3 py-2 text-center rounded-md"
+                href={`/course-progress/${course._id}`}
+                // course-progress /:courseId
+                className="block mt-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-center py-2 rounded-lg font-semibold transition-transform duration-300 hover:scale-105 hover:shadow-lg"
               >
-                Continue Learning
+                Continue Learning 🚀
               </a>
             </div>
           ))}

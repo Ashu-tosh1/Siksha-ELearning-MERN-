@@ -1,133 +1,134 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import {
+  useCompleteCourseMutation,
+  useGetCourseProgressQuery,
+  useInCompleteCourseMutation,
+  useUpdateLectureProgressMutation,
+} from "@/features/api/CourseProgressApi";
+import { CheckCircle, CheckCircle2, CirclePlay, PlayCircle } from "lucide-react";
 
-  import { useCompleteCourseMutation, useGetCourseProgressQuery, useInCompleteCourseMutation, useUpdateLectureProgressMutation } from "@/features/api/CourseProgressApi";
-import { CheckCircle2, CirclePlay } from "lucide-react";
-  import React, { useEffect, useState } from "react";
-  import { useParams } from "react-router-dom";
-  
-  const CourseProgress = () => {
-    const params = useParams();
-    const courseId = params.courseId;
-    const { data, isLoading, isError, refetch } =
-      useGetCourseProgressQuery(courseId);
-  
-    const [updateLectureProgress] = useUpdateLectureProgressMutation();
-    const [inCompleteCourse] = useInCompleteCourseMutation();
-    const [completeCourse] = useCompleteCourseMutation();
-  
-    useEffect(() => {
-      console.log(data);
-    }, [data]);
-  
-    const [currentLecture, setCurrentLecture] = useState(null);
-  
-    if (isLoading) return <p>Loading...</p>;
-    if (isError) return <p>Failed to load course details</p>;
-  
-    const { courseDetails, progress } = data.data;
-    const { courseTitle } = courseDetails;
-  
-    const initialLecture =
-      currentLecture || (courseDetails.lectures && courseDetails.lectures[0]);
-  
-    const isLectureCompleted = (lectureId) => {
-      return progress.some((prog) => prog.lectureId === lectureId && prog.viewed);
-    };
-  
-    const handleLectureProgress = async (lectureId) => {
-      await updateLectureProgress({ courseId, lectureId });
-      refetch();
-    };
-  
-    const handleSelectLecture = (lecture) => {
-      setCurrentLecture(lecture);
-      handleLectureProgress(lecture._id);
-    };
-  
-    const handleInCompleteLecture = async (lectureId) => {
-      await inCompleteCourse({ courseId, lectureId });
-      refetch();
-    };
-  
-    const handleCompleteAllLectures = async () => {
+const CourseProgress = () => {
+  const { courseId } = useParams();
+  const { data, isLoading, isError, refetch } = useGetCourseProgressQuery(courseId);
+
+  const [updateLectureProgress] = useUpdateLectureProgressMutation();
+  const [inCompleteCourse] = useInCompleteCourseMutation();
+  const [completeCourse] = useCompleteCourseMutation();
+  const [currentLecture, setCurrentLecture] = useState(null);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  if (isLoading) return <p className="text-center text-white">Loading...</p>;
+  if (isError) return <p className="text-center text-red-500">Failed to load course details</p>;
+
+  const { courseDetails, progress, completed } = data.data;
+  const { courseTitle } = courseDetails;
+  const initialLecture = currentLecture || courseDetails.lectures?.[0];
+
+  const isLectureCompleted = (lectureId) => progress.some((prog) => prog.lectureId === lectureId && prog.viewed);
+
+  const handleLectureProgress = async (lectureId) => {
+    await updateLectureProgress({ courseId, lectureId });
+    refetch();
+  };
+
+  const handleSelectLecture = (lecture) => {
+    setCurrentLecture(lecture);
+    handleLectureProgress(lecture._id);
+  };
+
+  const handleCompleteCourse = async () => {
+    try {
       await completeCourse(courseId);
       refetch();
-    };
-  
-    const allLecturesCompleted = courseDetails.lectures.every((lecture) =>
-      isLectureCompleted(lecture._id)
-    );
-  
-    return (
-      <div className="h-screen p-4 bg-gray-950 text-white  flex flex-col">
-        <div className="flex justify-between mb-4 mt-16">
-          <h1 className="text-2xl font-bold">{courseTitle}</h1>
-          <button 
-            onClick={handleCompleteAllLectures} 
-            className="px-4 py-2 bg-green-700 text-white font-bold rounded-lg hover:bg-blue-700"
-          >
-            {allLecturesCompleted ? "Course Completed" : "Mark All as Completed"}
-          </button>
+    } catch (error) {
+      console.error("Failed to mark as completed.");
+    }
+  };
+
+  const handleInCompleteCourse = async () => {
+    try {
+      await inCompleteCourse(courseId);
+      refetch();
+    } catch (error) {
+      console.error("Failed to mark as incomplete.");
+    }
+  };
+
+  return (
+    <div className="h-screen p-6 bg-[#0D0D0D] text-white flex flex-col">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-blue-400">{courseTitle}</h1>
+        <button
+          onClick={completed ? handleInCompleteCourse : handleCompleteCourse}
+          className={`px-5 py-2 text-sm font-medium rounded-lg transition-all ${
+            completed
+              ? "border border-green-500 text-green-500 hover:bg-green-500 hover:text-black"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
+        >
+          {completed ? (
+            <span className="flex items-center">
+              <CheckCircle className="h-5 w-5 mr-2" /> Completed
+            </span>
+          ) : (
+            "Mark as Completed"
+          )}
+        </button>
+      </div>
+
+      {/* Content Layout */}
+      <div className="flex flex-col md:flex-row gap-6 flex-grow">
+        {/* Video Player */}
+        <div className="flex-1 h-[620px] bg-gray-900 rounded-xl shadow-lg p-4 border border-gray-800">
+          <video
+            src={currentLecture?.videoUrl || initialLecture?.videoUrl}
+            controls
+            className="w-full h-[520px] rounded-lg"
+            onPlay={() => handleLectureProgress(currentLecture?._id || initialLecture?._id)}
+          />
+          <h3 className="mt-4 text-lg font-semibold">
+            Lecture {courseDetails.lectures.findIndex((lec) => lec._id === (currentLecture?._id || initialLecture?._id)) + 1}
+            : {currentLecture?.lectureTitle || initialLecture?.lectureTitle}
+          </h3>
         </div>
-  
-        <div className="flex flex-col md:flex-row gap-6 flex-grow">
-          <div className="flex-1 h-full rounded-lg shadow-lg p-4 bg-gray-800">
-            <div>
-              <video
-                src={currentLecture?.videoUrl || initialLecture.videoUrl}
-                controls
-                className="w-full h-full md:rounded-lg"
-                onPlay={() =>
-                  handleLectureProgress(currentLecture?._id || initialLecture._id)
-                }
-              />
-            </div>
-            <div className="mt-2">
-              <h3 className="font-medium text-lg">
-                {`Lecture ${
-                  courseDetails.lectures.findIndex(
-                    (lec) =>
-                      lec._id === (currentLecture?._id || initialLecture._id)
-                  ) + 1
-                } : ${
-                  currentLecture?.lectureTitle || initialLecture.lectureTitle
-                }`}
-              </h3>
-            </div>
-          </div>
-          <div className="flex flex-col w-full md:w-2/5 border-t md:border-t-0 md:border-l border-gray-700 md:pl-4 pt-4 md:pt-0">
-            <h2 className="font-semibold text-xl mb-4">Course Lectures</h2>
-            <div className="flex-1 overflow-y-auto">
-              {courseDetails?.lectures.map((lecture) => (
-                <div
-                  key={lecture._id}
-                  className={`mb-3 hover:cursor-pointer transition transform rounded-lg p-4 border border-gray-600 ${
-                    lecture._id === currentLecture?._id
-                      ? "bg-gray-700"
-                      : "bg-gray-800"
-                  } `}
-                  onClick={() => handleSelectLecture(lecture)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      {isLectureCompleted(lecture._id) ? (
-                        <CheckCircle2
-                          size={24}
-                          className="text-green-500 mr-2 cursor-pointer"
-                          onClick={() => handleInCompleteLecture(lecture._id)}
-                        />
-                      ) : (
-                        <CirclePlay size={24} className="text-gray-500 mr-2" />
-                      )}
-                      <h3 className="text-lg font-medium">{lecture.lectureTitle}</h3>
-                    </div>
-                  </div>
+
+        {/* Lecture List */}
+        <div className="w-full md:w-2/5 bg-gray-900 rounded-xl shadow-lg p-4 border border-gray-800">
+          <h2 className="text-xl font-semibold text-gray-300 mb-4">Course Lectures</h2>
+          <div className="space-y-3 max-h-[450px] overflow-y-auto">
+            {courseDetails?.lectures.map((lecture) => (
+              <div
+                key={lecture._id}
+                className={`flex items-center justify-between p-4 rounded-lg transition cursor-pointer border ${
+                  lecture._id === currentLecture?._id ? "bg-gray-800 border-blue-500" : "bg-gray-900 border-gray-700"
+                } hover:bg-gray-800`}
+                onClick={() => handleSelectLecture(lecture)}
+              >
+                <div className="flex items-center gap-3">
+                  {isLectureCompleted(lecture._id) ? (
+                    <CheckCircle2
+                      size={24}
+                      className="text-green-500 cursor-pointer"
+                      onClick={() => handleLectureProgress(lecture._id)}
+                    />
+                  ) : (
+                    <CirclePlay size={24} className="text-gray-500" />
+                  )}
+                  <h3 className="text-md font-medium">{lecture.lectureTitle}</h3>
                 </div>
-              ))}
-            </div>
+                {lecture._id === currentLecture?._id && <PlayCircle size={24} className="text-blue-400" />}
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    );
-  };
-  
-  export default CourseProgress;
+    </div>
+  );
+};
+
+export default CourseProgress;
