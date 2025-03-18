@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 // import { Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 import educator from "@/Pages/student/Images/educator.png"
-import slider from "@/Pages/student/Images/slider2.png"
+// import slider from "@/Pages/student/Images/slider2.png"
 // import image from "@/Pages/student/Images/image.png"
 
 const CourseCard = ({ course }) => {

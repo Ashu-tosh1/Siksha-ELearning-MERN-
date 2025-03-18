@@ -1,7 +1,7 @@
 import { useEditLectureMutation, useGetLectureByIdQuery, useRemoveLectureMutation } from "@/features/api/courseapi";
 import axios from "axios";
 import { Loader2, Upload, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 const MEDIA_API = "http://localhost:3000/api/v1/media";
