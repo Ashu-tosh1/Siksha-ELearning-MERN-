@@ -58,8 +58,8 @@ app.get('/', (req, res) => {
 const port = process.env.PORT || 3000; // Use environment variable or default to 3000 (for local dev)
 
 // Vercel doesn't need explicit app.listen()
-if (process.env.NODE_ENV !== "production") {
+
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);
   });
-}
+
