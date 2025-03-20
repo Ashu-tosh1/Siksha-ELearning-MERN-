@@ -1,5 +1,5 @@
 import { User } from "../models/user.model.js";
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import { generateToken } from "../utils/generateToken.js";
 import { deleteMediaFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
 import { v2 as cloudinary } from "cloudinary";
