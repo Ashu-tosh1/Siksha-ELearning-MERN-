@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { userLoggedIn } from '../auth/authslice';
 
 
-const USER_API="http://localhost:3000/api/v1/user/";
+const USER_API="https://server-kappa-fawn.vercel.app/api/v1/user/";
 
 export const authApi=createApi({
     reducerPath: 'authApi',

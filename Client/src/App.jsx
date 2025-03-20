@@ -20,11 +20,12 @@ import CourseTable from "./Pages/admin/course/CourseTable";
 import CourseProgress from "./Pages/student/CourseProgress";
 import { AdminRoute, ProtectedRoute } from "./components/ProtectedRoute";
 import PurchaseCourseProtectedRoute from "./components/PurchaseCourseProtectedRoute";
-import Dashboard from "./Pages/admin/Dashboarad";
+
 import Footer from "./Pages/student/Footer";
 import MyLearning from "./Pages/student/MyLearning";
 import SearchPage from "./Pages/student/SearchPage";
-import Trial from "./Pages/admin/trial";
+
+import AdminDashboard from "./Pages/admin/AdminDashboard";
 
 function App() {
   const user = useSelector((state) => state.auth.user); // Get user from Redux store
@@ -37,7 +38,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: isAdmin ? <Trial /> : (
+          element: isAdmin ? <AdminDashboard /> : (
             <>
               <HeroSection />
               <Courses />
@@ -99,7 +100,8 @@ function App() {
           children: [
             {
               path: "dashboard",
-              element: <Trial />,
+            
+              element: <AdminDashboard />,
             },
             {
               path: "course",
@@ -121,10 +123,7 @@ function App() {
               path: "course/:courseId/lecture/:lectureId",
               element: <EditLectures />,
             },
-            {
-              path: "trial",
-              element: < Trial  />,
-            },
+           
           ],
         },
       ],
