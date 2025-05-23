@@ -33,8 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://client-khaki-eight.vercel.app", // Replace with your frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow necessary methods
+    origin: "http://localhost:5173", // Replace with your frontend URL
+    methods: ["GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"], // Allow necessary methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allow custom headers
     credentials: true, // Allow cookies and authentication headers
   })
@@ -64,3 +64,4 @@ const port = process.env.PORT || 3000; // Use environment variable or default to
   });
 
 export default app;
+
