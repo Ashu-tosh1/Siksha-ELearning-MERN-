@@ -60,6 +60,8 @@ const LectureTab = () => {
         }
       } catch (error) {
         console.log("Error uploading video");
+        console.log(error)
+        console.log(error.message)
       } finally {
         setMediaProgress(false);
       }

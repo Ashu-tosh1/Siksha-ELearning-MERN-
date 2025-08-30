@@ -1,13 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userLoggedIn, userLoggedOut } from "../auth/authslice";
 
-const USER_API = "http://localhost:3000/api/v1/user/";
+const USER_API = "https://client-khaki-eight.vercel.app/api/v1/user/";
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({ baseUrl: USER_API, credentials: "include" }),
   endpoints: (builder) => ({
-    // Register User Mutation
+
     registerUser: builder.mutation({
       query: (inputData) => ({
         url: "register",
@@ -15,6 +15,7 @@ export const authApi = createApi({
         body: inputData,
       }),
     }),
+    
     // Login User Mutation
     loginUser: builder.mutation({
       query: (inputData) => ({

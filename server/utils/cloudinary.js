@@ -13,9 +13,12 @@ export const uploadMedia = async (file) => {
     const uploadResponse = await cloudinary.uploader.upload(file, {
       resource_type: "auto",
     });
+     console.log("Type:", uploadResponse.resource_type);
     return uploadResponse;
   } catch (error) {
     console.log(error);
+    console.log(error.message)
+    res.status(500).json({ message: "Error uploading video", error: error.message });
   }
 };
 export const deleteMediaFromCloudinary = async (publicId) => {

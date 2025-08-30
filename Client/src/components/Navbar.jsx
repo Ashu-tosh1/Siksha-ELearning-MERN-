@@ -82,7 +82,7 @@ const Navbar = () => {
           {user ? (
             <>
               {user?.role === "instructor" ? (
-                <Link to="/my-course" className="block hover:text-yellow-400">
+                <Link to="/course" className="block hover:text-yellow-400">
                   My Course
                 </Link>
               ) : (

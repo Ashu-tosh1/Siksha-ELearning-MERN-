@@ -43,7 +43,7 @@ The UI is styled with **shadcn/ui** and **lucide-react** for clean and modern ae
 
 ### 1. Login & Register Page
 
-![Login Page](./screenshots/login.png)
+![Login Page](./screenshots/login.png) 
 ![Register Page](./screenshots/register.png)
 
 ### 2. Student Dashboard: Homepage

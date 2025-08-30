@@ -6,7 +6,7 @@ import { purchaseApi } from "@/features/api/purchaseApi";
 import { courseProgressApi } from "@/features/api/CourseProgressApi";
 
 export const store = configureStore({
-    reducer: rootReducer,  // ✅ Use rootReducer directly
+    reducer: rootReducer,  
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
             authApi.middleware,
