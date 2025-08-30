@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const COURSE_API = "http://localhost:3000/api/v1/course";
+const COURSE_API = "https://final-ems-chi.vercel.app/api/v1/course";
 
 
 
