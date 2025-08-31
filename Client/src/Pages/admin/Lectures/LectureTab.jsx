@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { useEditLectureMutation, useGetLectureByIdQuery, useRemoveLectureMutation } from "@/features/api/courseapi";
 import axios from "axios";
-import { Loader2, Upload, Trash2 } from "lucide-react";
+import { Loader2, Upload, Trash2, BarChart, BookOpen, BookPlus } from "lucide-react";
 import  { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import motion from "framer-motion";
 
 const MEDIA_API = "https://client-khaki-eight.vercel.app/api/v1/media";
 
@@ -39,7 +41,7 @@ const LectureTab = () => {
   const handleDragOver = (event) => {
     event.preventDefault();
   };
-
+  const navigate = useNavigate();
   const uploadFile = async (file) => {
     if (file) {
       const formData = new FormData();

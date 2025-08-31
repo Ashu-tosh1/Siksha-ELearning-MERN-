@@ -9,7 +9,8 @@ import courseRoute from "./routes/course.route.js";
 import mediaRoute from "./routes/media.route.js";
 import purchaseRoute from "./routes/purchaseCourse.route.js";
 import courseProgressRoute from "./routes/courseProgress.route.js";
-
+import { model } from "mongoose";
+import serverless from "serverless-http";
 dotenv.config();
 connectDb();
 const app = express();
@@ -63,5 +64,6 @@ const port = process.env.PORT || 3000; // Use environment variable or default to
     console.log(`Server running on port ${port}`);
   });
 
+export const handler = serverless(app);
 export default app;
 
