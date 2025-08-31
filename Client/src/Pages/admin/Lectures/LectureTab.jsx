@@ -4,7 +4,7 @@ import axios from "axios";
 import { Loader2, Upload, Trash2, BarChart, BookOpen, BookPlus } from "lucide-react";
 import  { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import motion from "framer-motion";
+
 
 const MEDIA_API = "https://client-khaki-eight.vercel.app/api/v1/media";
 
