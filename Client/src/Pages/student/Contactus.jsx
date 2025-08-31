@@ -19,7 +19,7 @@ const Contactus = () => {
     setStatus("Sending...");
 
     try {
-      const response = await axios.post("http://localhost:3000/api/v1/send-email", formData);
+      const response = await axios.post("https://client-khaki-eight.vercel.app/api/v1/send-email", formData);
       if (response.data.success) {
         setStatus("Message sent successfully!");
         setFormData({ name: "", email: "", message: "" });

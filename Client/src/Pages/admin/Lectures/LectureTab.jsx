@@ -4,7 +4,7 @@ import { Loader2, Upload, Trash2 } from "lucide-react";
 import  { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-const MEDIA_API = "http://localhost:3000/api/v1/media";
+const MEDIA_API = "https://client-khaki-eight.vercel.app/api/v1/media";
 
 const LectureTab = () => {
   const [lectureTitle, setLectureTitle] = useState("");

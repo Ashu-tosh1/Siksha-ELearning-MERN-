@@ -9,7 +9,7 @@ const MyLearning = () => {
   useEffect(() => {
     const fetchEnrolledCourses = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:3000/api/v1/course/enrolled/${user._id}`);
+        const { data } = await axios.get(`https://client-khaki-eight.vercel.app/api/v1/course/enrolled/${user._id}`);
 
         console.log("Fetched Courses with Progress:", data.courses);
         setEnrolledCourses(data.courses);

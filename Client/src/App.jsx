@@ -51,6 +51,10 @@ function App() {
           element: <Login />,
         },
         {
+          path: "signup",
+          element: <Login />,
+        },
+        {
           path: "profile",
           element: (
             <ProtectedRoute>

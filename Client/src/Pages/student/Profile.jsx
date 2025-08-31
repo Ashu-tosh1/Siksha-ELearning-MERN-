@@ -20,7 +20,7 @@ const Profile = () => {
 
   const fetchEnrolledCourses = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/v1/course/enrolled/${userId}`, {
+      const response = await axios.get(`https://client-khaki-eight.vercel.app/api/v1/course/enrolled/${userId}`, {
         withCredentials: true,
       });
       setEnrolledCourses(response.data.courses || []);
